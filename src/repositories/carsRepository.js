@@ -18,6 +18,22 @@ const CarsRepository = {
         console.info(result);
 
         return result.rows;
+    },
+    deleteCar: async (id) => {
+        const text = 'DELETE FROM carros WHERE id = $1';
+
+        const values = [id];
+
+        await query(text, values);
+    },
+    updateCar: async (id, car) => {
+        const text = 'UPDATE carros SET brand = $1, model = $2, cylinders = $3, year = $4 WHERE id = ${id} RETURNING *';
+
+        const values = [car.brand, car.model, car.cylinders, car.year];
+
+        const updated = await query(text, values);
+
+        return updated.rows[0];
     }
 }
 
