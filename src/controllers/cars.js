@@ -1,7 +1,9 @@
-import cars from '../db/db.js';
+import CarsRepository from '../repositories/carsRepository.js';
 
 const CarsController = {
-    getCars: (req, res) => {
+    getCars: async (req, res) => {
+        const cars = await CarsRepository.getCars();
+
         res.json(cars);
     },
 
@@ -12,12 +14,13 @@ const CarsController = {
             return res.status(400).json({ message: 'All fields are required' })
         }
 
-        cars.push({
-            ...newCar,
-            id: cars.length + 1,
-        });
-
-        res.json(newCar)
+      try {
+        CarsRepository.addCar(newCar);
+      } catch (error) {
+        return res.status(500).json({ message: 'Internal server error' });
+      }
+      
+        res.status(201).json(newCar)
     },
     deleteCar: (req, res) => {
         const { id } = req.params;
@@ -58,3 +61,6 @@ const CarsController = {
 }
 
 export default CarsController;
+
+
+

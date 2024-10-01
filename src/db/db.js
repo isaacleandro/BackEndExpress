@@ -1,11 +1,29 @@
 
-let cars = [
-    { id: 1, brand: 'Ford', model: 'Mustang', cylinders: 400, year: 1998 },
-    { id: 2, brand: 'Chevrolet', model: 'Monza', cylinders: 180, year: 1989 },
-    { id: 3, brand: 'BMW', model: 'M3', cylinders: 195, year: 2010 },
-    { id: 4, brand: 'Fiat', model: 'Mobi', cylinders: 24, year: 2023 },
-]
+import pg from "pg";
 
-export default {
+const pool = new pg.Pool({
+    user: 'postgres',
+    host: 'localhost',
+    database: 'store',
+    password: '290398',
+    port: 5432,
+});
+
+const query = async (text, params) => {
+    try {
+        const result = await pool.query(text, params);
+
+        return result;
+    } catch (error) {
+        console.log(error);
+        
+        return error;
+    }
+}
+
+let cars = []
+
+export {
     cars,
+    query
 }
